@@ -1,0 +1,13 @@
+%div{"data-role" => "page"}
+  %div{"data-role" => "header"}
+    %h1 Editing user
+  %div{"role" => "main", "class"=>"ui-content"}
+    = render 'form' #, payments: @payments, user: @user
+    = link_to 'Back', root_path, class: "ui-btn"
+  %div{"data-role" => "footer"}
+    %h1 Powered by Kishore
+
+:javascript
+  $(document).ready(function() {
+   $("#payment_paid_at").datepicker({  maxDate: 0 });
+  });    

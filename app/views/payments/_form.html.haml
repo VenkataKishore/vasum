@@ -1,0 +1,28 @@
+= form_for @payment, url: user_payments_path(@user) do |f|
+  - if @payment.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@payment.errors.count, "error")} prohibited this payment from being saved:"
+      %ul
+        - @payment.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :paid_at
+    = f.text_field :paid_at, "data-role" => "date"
+  .field
+    = f.label :paid_to
+    = f.text_field :paid_to, placeholder: "Vasu"
+  .field
+    = f.label :amount
+    = f.text_field :amount, placeholder: "2000"
+
+  .actions
+    = f.submit 'Save'
+
+<link rel="stylesheet" href="http://rawgithub.com/arschmitz/jquery-mobile-datepicker-wrapper/v0.1.1/jquery.mobile.datepicker.css">
+<script id="mobile-datepicker" src="http://rawgithub.com/arschmitz/jquery-mobile-datepicker-wrapper/v0.1.1/jquery.mobile.datepicker.js"></script>
+
+:javascript
+  $(document).ready(function(){
+     $("input[data-role=date]").datepicker({  maxDate: 0 });
+  });

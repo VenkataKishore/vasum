@@ -1,0 +1,46 @@
+%div{"data-role" => "page"}
+  %div{"data-role" => "header"}
+    %h1 Import users
+  %div{"role" => "main", "class"=>"ui-content"}
+    = form_tag(imports_path, { :multipart => true, :'data-ajax' => false }) do
+      %fieldset{"data-role" => "controlgroup", "data-type" => "horizontal"}
+        %input#radio-choice-h-2a{checked: "checked", name: "type", type: "radio", value: "only_users"}/
+        %label{for: "radio-choice-h-2a"} Only Users
+        %input#radio-choice-h-2b{name: "type", type: "radio", value: "user_wise"}/
+        %label{for: "radio-choice-h-2b"} User wise payments
+        %input#radio-choice-h-2c{name: "type", type: "radio", value: "date_wise"}/
+        %label{for: "radio-choice-h-2c"} Date wise payments
+      %br
+      %fieldset
+        %label CSV File
+        = file_field_tag :file
+      %br
+      = submit_tag "Import", class: "ui-btn"
+
+    - if @importer
+      %div
+        - if @importer.error
+          %p{style: 'color: red'}= @importer.error
+        - else
+          %p
+            %b= pluralize(@importer.existed_count, 'user')
+            Existed
+          %p
+            %b= pluralize(@importer.added_count, 'user')
+            Imported
+          %p
+            %b= pluralize(@importer.invalid_count, 'user')
+            Skipped
+          %br
+          - unless @importer.errors.empty?
+            %table{class: "table table-condensed", style: 'color: red; padding-left: 2em; text-align:left;'}
+              %tr
+                %th User
+                %th Error
+              - @importer.errors.each_with_index do |error, index|
+                %tr
+                  %td= error[:title]
+                  %td= simple_format error[:message], {style: "margin:0;"}
+    %p= link_to 'Home', root_path, class: "ui-btn"
+  %div{"data-role" => "footer"}
+    %h1 Powered by Kishore                    

@@ -1,0 +1,26 @@
+%h1 Listing users
+
+- if @payments.blank?
+  No Payments found for #{@user.name}
+  %br
+- else
+  %table
+    %thead
+      %tr
+        %th User
+        %th Paid At
+        %th Paid To
+        %th Amount
+
+    %tbody
+      - @payments.each do |payment|
+        %tr
+          %td= payment.user.name
+          %td= payment.paid_at
+          %td= payment.paid_to
+          %td= payment.amount
+%br
+
+= link_to "[+] New Payment to #{@user.name}", new_user_payment_path(@user)
+|
+= link_to "Back", root_path

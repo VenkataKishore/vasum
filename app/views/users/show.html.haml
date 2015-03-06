@@ -1,0 +1,91 @@
+%div{"data-role" => "page"}
+  %div{"data-role" => "header"}
+    %h1= @user.name
+  %div{"role" => "main", "class"=>"ui-content"}
+    %div{"data-role" => "collapsibleset", "data-theme" => "a", "data-content-theme" => "a"}
+      %div{"data-role" => "collapsible"}
+        %h3 User Details
+        %div
+          %p
+            %b Name:
+            = @user.name
+          %p
+            %b Mobile:
+            = @user.mobile
+          %p
+            %b Address:
+            = @user.address
+          %p
+            %b City:
+            = @user.city
+          %p
+            %b State:
+            = @user.state
+          %p
+            %b Country:
+            = @user.country
+          %p
+            %b Zip:
+            = @user.zip
+          %p
+            %b About:
+            = @user.about
+          %p
+            %b Profile pic:
+            = image_tag(@user.profile_pic.url(:thumb))
+      %div{"data-role" => "collapsible"}
+        %h3 Payment Details
+        %div
+          - if @payments.blank?
+            No Payments found for #{@user.name}
+            %br
+          - else
+            %div{"data-role" => "collapsibleset", "data-theme" => "b", "data-content-theme" => "a", "data-mini" => "true"}
+              - lists1 = @payments.group_by { |p| p.paid_at.strftime("%Y") }
+              - lists1.each do |year, list|
+                %div{"data-role" => "collapsible"}
+                  %h3
+                    %span
+                      %i.arrow{id: "#{year}"}
+                    = year
+                  %ul{class: "#{year}_posts main"}
+                    - lists = list.group_by { |p| p.paid_at.strftime("%B") }
+                    - lists.each do |month, entries|
+                      %li{"data-role" => "collapsible"}
+                        - mm = entries.first.paid_at.strftime("%m")
+                        %h3
+                          %span
+                            %i.arrow{id: "#{year}_#{mm}"}
+                          = month
+                          (
+                          = entries.collect(&:amount).sum
+                          )
+                        %div
+                          /
+                            %form{class: "ui-filterable"}
+                              %input{id: "rich-autocomplete-input1", "data-type" => "search", placeholder: "Search by name..."}
+                          %table{"data-role" => "table", id: "table-column-toggle-#{year}_#{mm}", "data-mode" => "columntoggle", class: "ui-responsive table-stroke", "data-filter" => "true", "data-inset" => "true", "data-input" => "#rich-autocomplete-input1"}
+                            %thead
+                              %tr
+                                %th{"data-priority" => "1"} Date
+                                %th{"data-priority" => "2"} Amount
+                            %tbody{class: "#{year}_#{mm}_posts"}
+                              - new_list = entries.group_by { |p| p.paid_at.strftime("%d") }
+                              - new_list.each do |day, payments|
+                                %tr
+                                  %td= day
+                                  %td= payments.collect(&:amount).sum
+
+          = link_to "[+] New Payment to #{@user.name}", new_user_payment_path(@user), class: "ui-btn"
+
+    %br
+
+    .new_payment.hide
+    =# render 'payments/form', payment: @payment, user: @user
+
+
+    = link_to 'Edit', edit_user_path(@user), class: "ui-btn"
+    = link_to 'Destroy', user_path(@user), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "ui-btn"
+    = link_to 'Back', users_path, class: "ui-btn"
+  %div{"data-role" => "footer"}
+    %h1 Powered by Kishore

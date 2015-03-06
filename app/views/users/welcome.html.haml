@@ -1,0 +1,16 @@
+%div{"data-role" => "page"}
+  %div{"data-role" => "header"}
+    %h1 Welcome!
+  %div{"role" => "main", "class"=>"ui-content"}
+    %p= link_to 'Users', users_path, class: "ui-btn"
+    %p= link_to 'Payments', all_payments_users_path, class: "ui-btn"
+    %div.ui-grid-a.ui-responsive
+      .ui-block-a
+        %div{class: "ui-btn ui-shadow ui-corner-all ui-state-disabled"}
+          Amount Collected today:
+          %i{class: "fa fa-inr"}
+          #{@total_amount}
+      .ui-block-b
+        = link_to 'New Payment', direct_payment_path, class: "ui-btn ui-shadow ui-corner-all"
+  %div{"data-role" => "footer"}
+    %h1 Powered by Kishore

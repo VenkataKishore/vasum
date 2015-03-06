@@ -1,0 +1,38 @@
+= form_for @user, :html => { :'data-ajax' => false } do |f|
+  - if @user.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :mobile
+    = f.text_field :mobile
+  .field
+    = f.label :address
+    = f.text_area :address
+  .field
+    = f.label :city
+    = f.text_field :city
+  .field
+    = f.label :state
+    = f.text_field :state
+  .field
+    = f.label :country
+    = f.text_field :country
+  .field
+    = f.label :zip
+    = f.text_field :zip
+  .field
+    = f.label :about
+    = f.text_area :about
+  .field
+    = f.label :profile_pic
+    = f.file_field :profile_pic
+
+  %br
+  = f.button "Save", type: "submit", class: "ui-btn ui-icon-delete ui-btn-icon-left ui-shadow-icon ui-btn-b"

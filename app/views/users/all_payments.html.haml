@@ -1,0 +1,66 @@
+%div{"data-role" => "page"}
+  %div{"data-role" => "header"}
+    %h1 All Payments
+    = link_to 'Home', root_path, class: "ui-btn ui-btn-left"
+    = link_to 'Import', imports_path, class: "ui-btn ui-btn-right"
+
+  %div{"role" => "main", "class"=>"ui-content"}
+
+    %div{"data-role" => "collapsibleset", "data-theme" => "b", "data-content-theme" => "a"}
+      - if @type == "2day"
+        %div{"data-role" => "collapsible"}
+          %h3 Today
+          %div
+            %form{class: "ui-filterable"}
+              %input{id: "rich-autocomplete-input", "data-type" => "search", placeholder: "Search by name..."}
+            %table{"data-role" => "table", id: "table-column-toggle", "data-mode" => "columntoggle", class: "ui-responsive table-stroke", "data-filter" => "true", "data-inset" => "true", "data-input" => "#rich-autocomplete-input"}
+              %thead
+                %tr
+                  %th{"data-priority" => "1"} Name
+                  %th{"data-priority" => "2"} Amount
+              %tbody
+                - @lists.group_by { |p| p.user.name }.each do |name, payment|
+                  %tr
+                    %td= name
+                    %td= payment.collect(&:amount).sum
+                %tr
+                  %td
+                    %b Total
+                  %td
+                    %b= @lists.collect(&:amount).sum rescue 0
+      - else
+        - @lists.each do |filter, list|
+          %div{"data-role" => "collapsible"}
+            %h3= filter
+            %div
+              %form{class: "ui-filterable"}
+                %input{id: "rich-autocomplete-input-#{filter}", "data-type" => "search", placeholder: "Search by name..."}
+              %table{"data-role" => "table", id: "table-column-toggle", "data-mode" => "columntoggle", class: "ui-responsive table-stroke", "data-filter" => "true", "data-inset" => "true", "data-input" => "#rich-autocomplete-input-#{filter}"}
+                %thead
+                  %tr
+                    %th{"data-priority" => "1"} Name
+                    %th{"data-priority" => "2"} Amount
+                %tbody
+                  - list.group_by { |p| p.user.name }.each do |name, payment|
+                    %tr
+                      %td= name
+                      %td= payment.collect(&:amount).sum
+                  %tr
+                    %td
+                      %b Total
+                    %td
+                      %b= list.collect(&:amount).sum rescue 0
+
+
+    %div.ui-grid-a.ui-responsive
+      .ui-block-a
+        = link_to 'Today', all_payments_users_path(fl: "2day"), class: "ui-btn ui-shadow ui-corner-all"
+      .ui-block-b
+        = link_to 'Daily', all_payments_users_path(fl: "dd"), class: "ui-btn ui-shadow ui-corner-all"
+    %div.ui-grid-a.ui-responsive
+      .ui-block-a
+        = link_to 'Monthly', all_payments_users_path(fl: "mm"), class: "ui-btn ui-shadow ui-corner-all"
+      .ui-block-b
+        = link_to 'Yearly', all_payments_users_path(fl: "yy"), class: "ui-btn ui-shadow ui-corner-all"
+  %div{"data-role" => "footer"}
+    %h1 Powered by Kishore
