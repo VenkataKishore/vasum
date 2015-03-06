@@ -13,11 +13,14 @@
 
 ActiveRecord::Schema.define(version: 20150113111721) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "payments", force: true do |t|
     t.integer  "user_id"
     t.datetime "paid_at"
     t.string   "paid_to"
-    t.float    "amount",     limit: 24
+    t.float    "amount"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
